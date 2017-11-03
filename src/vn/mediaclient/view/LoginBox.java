@@ -49,7 +49,13 @@ public class LoginBox extends JFrame implements ActionListener, KeyListener {
 
 		pack();
 		setVisible(true);
-		
+		this.addWindowListener(new java.awt.event.WindowAdapter() {
+		    @Override
+		    public void windowClosing(java.awt.event.WindowEvent windowEvent) {
+		     client.sendCloseRequest();
+		     dispose();
+		    }
+		});
 	}
 
 	private JPanel createButtonPanel() {
@@ -123,6 +129,7 @@ public class LoginBox extends JFrame implements ActionListener, KeyListener {
 	@Override
 	public void actionPerformed(ActionEvent e) {
 		if (e.getSource() == btnClose) {
+			client.sendCloseRequest();
 			this.dispose();
 		}
 
