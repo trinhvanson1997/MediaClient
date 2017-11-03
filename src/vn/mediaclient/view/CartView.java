@@ -16,17 +16,14 @@ import javax.swing.JPanel;
 import javax.swing.JTextField;
 import javax.swing.border.EmptyBorder;
 
-import vn.media.models.DiaNhac;
-import vn.media.models.DiaPhim;
-import vn.media.models.Sach;
-import vn.media.server.models.MuaHang;
+import vn.media.models.MuaHang;
 import vn.mediaclient.client.Client;
-import vn.mediaclient.models.DatHang;
 
 public class CartView extends JDialog implements ActionListener{
 	private ClientUI clientUI;
 	
-	private List<DatHang> listDH;
+	private List<MuaHang> listDH;
+	
 	private JButton btnDatHang;
 	private JButton btnXoaKhoiGio;
 	private JButton btnThoat;
@@ -48,6 +45,7 @@ public class CartView extends JDialog implements ActionListener{
 		this.client = client;
 		
 		this.listDH = clientUI.getListDH();
+		
 		this.coin = clientUI.getCoin();
 		this.username =clientUI.getUsername();
 		this.topPanel =clientUI.getTopPanel();
@@ -113,7 +111,7 @@ public class CartView extends JDialog implements ActionListener{
 			if(index >=0) {
 				listDH.remove(index);
 				long tienTamTinh = 0;
-				for(DatHang m: listDH) {
+				for(MuaHang m: listDH) {
 					tienTamTinh += m.getDonGia()*m.getSoLuong();
 				}
 				
@@ -151,7 +149,7 @@ public class CartView extends JDialog implements ActionListener{
 		
 		
 		long tienTamTinh = 0;
-		for(DatHang m: listDH) {
+		for(MuaHang m: listDH) {
 			tienTamTinh += m.getDonGia()*m.getSoLuong();
 		}
 		
@@ -163,6 +161,7 @@ public class CartView extends JDialog implements ActionListener{
 			JOptionPane.showMessageDialog(null, "Bạn không đủ tiền để thực hiện giao dịch", "Cảnh báo", JOptionPane.WARNING_MESSAGE);
 		}
 		else {
+			client.sendOrderRequest(listDH,clientUI.id);
 			JOptionPane.showMessageDialog(null, "Bạn đã đặt hàng thành công");
 			dispose();
 			coin = coin -tienTamTinh;
@@ -181,7 +180,7 @@ public class CartView extends JDialog implements ActionListener{
 			topPanel.repaint();
 		
 			//update the number of product in table sanpham
-			for(DatHang dh:listDH) {
+			for(MuaHang dh:listDH) {
 				String idsanpham = dh.getIdSanPham();
 				int soluong = client.getSoLuongTonKho(idsanpham) - dh.getSoLuong();
 				
@@ -206,7 +205,10 @@ public class CartView extends JDialog implements ActionListener{
 			
 			tfTamTinh.setText(null);
 			tfTongTien.setText(null);
-
+			
+			
+		
+			
 			//update list in listMH
 			listDH.removeAll(listDH);
 			tableCart.updateTable(listDH);

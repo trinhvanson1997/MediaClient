@@ -12,7 +12,7 @@ import javax.swing.JTable;
 import javax.swing.ListSelectionModel;
 import javax.swing.table.DefaultTableModel;
 
-import vn.mediaclient.models.DatHang;
+import vn.media.models.MuaHang;
 
 public class TableCart extends JPanel{
 	private JTable table;
@@ -54,11 +54,11 @@ public class TableCart extends JPanel{
 
 	}
 
-	public void updateTable(List<DatHang> list){
+	public void updateTable(List<MuaHang> list){
 		DecimalFormat format = (DecimalFormat) DecimalFormat.getCurrencyInstance(new Locale("vi","VN"));
 		String[][] data =  new String[list.size()][columns.length];
 		for(int i=0;i<list.size();i++){
-			DatHang s = list.get(i);
+			MuaHang s = list.get(i);
 		
 			data[i][0] = s.getIdSanPham();
 			data[i][1] = String.valueOf(s.getSoLuong());

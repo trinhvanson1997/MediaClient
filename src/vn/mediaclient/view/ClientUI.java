@@ -1,12 +1,14 @@
 package vn.mediaclient.view;
 
 import java.awt.BorderLayout;
+import java.awt.Dimension;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
 import java.util.List;
 
 import javax.swing.BorderFactory;
+import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
@@ -17,15 +19,17 @@ import javax.swing.border.EtchedBorder;
 import vn.media.models.DiaNhac;
 import vn.media.models.DiaPhim;
 import vn.media.models.KhachHang;
+import vn.media.models.MuaHang;
 import vn.media.models.Sach;
-import vn.media.server.models.MuaHang;
 import vn.mediaclient.client.Client;
-import vn.mediaclient.models.DatHang;
 
 
-public class ClientUI extends JFrame{
+public class ClientUI extends JFrame implements ActionListener{
+	public String id;
 	
-	private List<DatHang> listDH;
+	
+	private List<MuaHang> listDH;
+	
 	private List<Sach > listBook;
 	private List<DiaPhim> listMovie;
 	private List<DiaNhac> listMusic;
@@ -43,7 +47,7 @@ public class ClientUI extends JFrame{
 	private TableMusicPanel tableMusicPanel;
 	
 	private SearchClientPanel searchClientPanel;
-	
+	private JButton btnRefresh;
 	private String username;
 	private long coin;
 	
@@ -81,7 +85,10 @@ public class ClientUI extends JFrame{
 		initButtonInfo();
 		initButtonLogout();
 		initNapTien();
+		initRefresh();
 		
+		KhachHang kh = client.getCus(username);
+		this.id = kh.getId();
 		setVisible(true);
 	}
 	
@@ -112,6 +119,13 @@ public class ClientUI extends JFrame{
 		tablePanel = new JPanel();
 		tablePanel.setLayout(new BorderLayout(0,10));
 		tablePanel.setBorder(new EmptyBorder(10, 10, 10, 10));
+		 tablePanel.setPreferredSize(new Dimension(1000, 600));
+		 
+		btnRefresh = new JButton("Refresh");
+		
+		btnRefresh.addActionListener(this);
+		
+		tablePanel.add(btnRefresh,BorderLayout.NORTH);
 		
 		tabbedProduct = new TabbedProduct();
 		tablePanel.add(tabbedProduct, BorderLayout.CENTER);
@@ -196,6 +210,52 @@ public class ClientUI extends JFrame{
 		});
 	}
 	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	public void initRefresh() {
+		btnRefresh.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				int now = tabbedProduct.getSelectedIndex();
+				
+				if(now == 0) {
+					List<Sach> list = client.getAllBookFromServer();
+					listBook = list;
+					tabbedProduct.getTableBookPanel().updateTableClient(list);
+				}
+				else if(now == 1) {
+					List<DiaPhim> list = client.getAllMoviesFromServer();
+					listMovie = list;
+					tabbedProduct.getTableMoviesPanel().updateTableClient(list);
+				}
+				else if(now == 2) {
+					List<DiaNhac> list = client.getAllMusicFromServer();
+					listMusic = list;
+					tabbedProduct.getTableMusicPanel().updateTableClient(list);
+				}
+				
+			}
+		});
+	}
+	
+	public JButton getBtnRefresh() {
+		return btnRefresh;
+	}
+
+	public void setBtnRefresh(JButton btnRefresh) {
+		this.btnRefresh = btnRefresh;
+	}
+
 	public SearchClientPanel getSearchClientPanel() {
 		return searchClientPanel;
 	}
@@ -286,11 +346,12 @@ public class ClientUI extends JFrame{
 
 
 
-	public List<DatHang> getListDH() {
+
+	public List<MuaHang> getListDH() {
 		return listDH;
 	}
 
-	public void setListDH(List<DatHang> listDH) {
+	public void setListDH(List<MuaHang> listDH) {
 		this.listDH = listDH;
 	}
 
@@ -324,6 +385,12 @@ public class ClientUI extends JFrame{
 
 	public void setClient(Client client) {
 		this.client = client;
+	}
+
+	@Override
+	public void actionPerformed(ActionEvent arg0) {
+		// TODO Auto-generated method stub
+		
 	}
 
 }

@@ -10,9 +10,8 @@ import javax.swing.JButton;
 import javax.swing.JOptionPane;
 import javax.swing.JTextField;
 
-import vn.media.server.models.MuaHang;
+import vn.media.models.MuaHang;
 import vn.mediaclient.client.Client;
-import vn.mediaclient.models.DatHang;
 import vn.mediaclient.view.ClientUI;
 
 public class AddProductClient {
@@ -21,7 +20,7 @@ public class AddProductClient {
 	private JTextField tfIDSanPham,tfDonGia,tfSoLuong,tfTienChoSP;
 	private JTextField tfTamTinh,tfThueVAT,tfTongTien;
 	
-	private List<DatHang> listDH;
+	private List<MuaHang> listDH;
 	private Client client;
 	
 	public AddProductClient(ClientUI clientUI ,Client client) {
@@ -63,7 +62,7 @@ public class AddProductClient {
 					JOptionPane.showMessageDialog(null, "Sản phẩm này tạm thời hết hàng. Vui lòng chọn sản phẩm khác", null, JOptionPane.WARNING_MESSAGE);
 				}
 				else {
-					for(DatHang dh:listDH) {
+					for(MuaHang dh:listDH) {
 						if(dh.getIdSanPham().equals(tfIDSanPham.getText())) {
 							JOptionPane.showMessageDialog(null, "Sản phẩm này đã ở trong giỏ", null, JOptionPane.WARNING_MESSAGE);
 							return;
@@ -76,12 +75,12 @@ public class AddProductClient {
 					
 						long dongia = Long.parseLong(convert(tfDonGia.getText()));
 						
-						DatHang dh = new DatHang(tfIDSanPham.getText(),Integer.parseInt(tfSoLuong.getText()),dongia);
+						MuaHang dh = new MuaHang(tfIDSanPham.getText(),Integer.parseInt(tfSoLuong.getText()),dongia);
 						
 						listDH.add(dh);
 						
 						long tienTamTinh = 0;
-						for(DatHang d: listDH) {
+						for(MuaHang d: listDH) {
 							tienTamTinh += d.getDonGia()*d.getSoLuong();
 						}
 						

@@ -40,7 +40,7 @@ public class ChangeTableClient {
 		tabbedProduct.addChangeListener(new ChangeListener() {
 	        public void stateChanged(ChangeEvent e) {
 	            if(tabbedProduct.getSelectedIndex() == 0) {
-	            	tablePanel.remove(tablePanel.getComponent(1));
+	            	tablePanel.remove(tablePanel.getComponent(2));
 					tablePanel.add(searchClientPanel.getSearchBookPanel(), BorderLayout.SOUTH);
 					tablePanel.revalidate();
 					tablePanel.repaint();
@@ -50,7 +50,7 @@ public class ChangeTableClient {
 	            }
 	            else if(tabbedProduct.getSelectedIndex() == 1) {
 	            
-	            	tablePanel.remove(tablePanel.getComponent(1));
+	            	tablePanel.remove(tablePanel.getComponent(2));
 					tablePanel.add(searchClientPanel.getSearchMoviePanel(), BorderLayout.SOUTH);
 					tablePanel.revalidate();
 					tablePanel.repaint();
@@ -60,7 +60,7 @@ public class ChangeTableClient {
 					
 	            }
 	            else if(tabbedProduct.getSelectedIndex() == 2) {
-	            	tablePanel.remove(tablePanel.getComponent(1));
+	            	tablePanel.remove(tablePanel.getComponent(2));
 					tablePanel.add(searchClientPanel.getSearchMusicPanel(), BorderLayout.SOUTH);
 					tablePanel.revalidate();
 					tablePanel.repaint();

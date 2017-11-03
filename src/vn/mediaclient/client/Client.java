@@ -14,6 +14,7 @@ import javax.swing.JOptionPane;
 import vn.media.models.DiaNhac;
 import vn.media.models.DiaPhim;
 import vn.media.models.KhachHang;
+import vn.media.models.MuaHang;
 import vn.media.models.Sach;
 import vn.mediaclient.controller.AddProductClient;
 import vn.mediaclient.controller.ChangeTableClient;
@@ -28,7 +29,8 @@ public class Client {
 	public static final int LOGIN = 1, LOGIN_SUCCESS = 2, LOGIN_FAIL = 3, GET_ALL_BOOK = 4, GET_ALL_MOVIE = 5,
 			GET_ALL_MUSIC = 6, GET_CUSTOMER_NAME = 7, GET_COIN_CUS = 8, GET_SLTK = 9, UPDATE_COIN = 10,
 			UPDATE_NUMBER_PRODUCT = 11, UPDATE_CUSTOMER_INFO = 12, GET_CUSTOMER = 13, CHECK_SERIAL = 14,
-			GET_VALUE_CARD = 15, CHECK_EXIST_USERNAME = 16, ADD_CUSTOMER = 17, CLOSE_REQUEST = 18;
+			GET_VALUE_CARD = 15, CHECK_EXIST_USERNAME = 16, ADD_CUSTOMER = 17, CLOSE_REQUEST = 18,
+			ORDER_REQUEST=19;
 
 	public Socket socket;
 	public DataInputStream in;
@@ -374,6 +376,26 @@ public class Client {
 			e.printStackTrace();
 		}
 		return false;
+	}
+
+	public void sendOrderRequest(List<MuaHang> listDH,String idkhachhang) {
+		try {
+			out.writeInt(ORDER_REQUEST);
+			out.flush();
+
+			out.writeUTF(idkhachhang);
+			out.flush();
+			
+			oos.writeObject(listDH);
+			oos.flush();
+			
+			
+		
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	
 	}
 
 }

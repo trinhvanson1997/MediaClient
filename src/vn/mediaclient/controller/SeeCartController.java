@@ -7,15 +7,15 @@ import java.util.List;
 import javax.swing.JButton;
 import javax.swing.JOptionPane;
 
+import vn.media.models.MuaHang;
 import vn.mediaclient.client.Client;
-import vn.mediaclient.models.DatHang;
 import vn.mediaclient.view.CartView;
 import vn.mediaclient.view.ClientUI;
 
 public class SeeCartController {
 	
 	private JButton btnThanhToan;
-	public List<DatHang> listDH ;
+	public List<MuaHang> listDH ;
 	
 	public SeeCartController(ClientUI clientUI,Client client) {
 		btnThanhToan = clientUI.getFuncClientPanel().getBtnThanhToan();
