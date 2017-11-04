@@ -7,7 +7,7 @@ import vn.mediaclient.client.Client;
 
 import vn.mediaclient.view.LoginBox;
 
-public class Main {
+public class MainClient {
 	
 	public static void main(String[] args) {
 		Client client = new Client();

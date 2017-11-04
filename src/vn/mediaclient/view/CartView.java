@@ -165,6 +165,7 @@ public class CartView extends JDialog implements ActionListener{
 			JOptionPane.showMessageDialog(null, "Bạn đã đặt hàng thành công");
 			dispose();
 			coin = coin -tienTamTinh;
+			clientUI.setCoin(coin);
 			
 			//update coin of customer in database
 			client.updateCoin(username, coin);

@@ -5,6 +5,7 @@ import java.io.DataOutputStream;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
+import java.net.InetAddress;
 import java.net.Socket;
 import java.net.UnknownHostException;
 import java.util.List;
@@ -40,9 +41,9 @@ public class Client {
 
 	public Client() {
 		try {
-			
-			socket = new Socket("localhost", 2000);
-			
+				
+			socket = new Socket("42.112.139.16", 1997);
+				
 				in = new DataInputStream(socket.getInputStream());
 				out = new DataOutputStream(socket.getOutputStream());
 				ois = new ObjectInputStream(socket.getInputStream());

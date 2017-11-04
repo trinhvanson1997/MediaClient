@@ -183,9 +183,10 @@ public class ClientUI extends JFrame implements ActionListener{
 				String serial = JOptionPane.showInputDialog("Mời bạn nhập mã thẻ");
 				
 				if(client.checkSerial(serial)) {
-					JOptionPane.showMessageDialog(null, "Nạp thẻ thành công");
+				
 					
 					long value = client.getValueCard(serial);
+					
 					coin += value;
 					
 					client.updateCoin(username, coin);
@@ -200,7 +201,7 @@ public class ClientUI extends JFrame implements ActionListener{
 					
 					topPanel.validate();
 					topPanel.repaint();
-					
+					JOptionPane.showMessageDialog(null, "Nạp thẻ thành công");
 				}
 				else {
 					JOptionPane.showMessageDialog(null, "Nạp thẻ thất bại");
