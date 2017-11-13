@@ -19,13 +19,14 @@ public class SeeCartController {
 	
 	public SeeCartController(ClientUI clientUI,Client client) {
 		btnThanhToan = clientUI.getFuncClientPanel().getBtnThanhToan();
-		this.listDH = clientUI.getListDH();
+		
 		
 		
 		btnThanhToan.addActionListener(new ActionListener() {
 			
 			@Override
 			public void actionPerformed(ActionEvent e) {
+				listDH = clientUI.getListDH();
 				if(listDH.isEmpty()) {
 					JOptionPane.showMessageDialog(null, "Giỏ hàng trống, vui lòng chọn hàng để xem", null, JOptionPane.WARNING_MESSAGE);
 				}

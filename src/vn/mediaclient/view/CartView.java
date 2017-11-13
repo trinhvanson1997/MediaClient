@@ -13,6 +13,7 @@ import javax.swing.JDialog;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
+import javax.swing.JProgressBar;
 import javax.swing.JTextField;
 import javax.swing.border.EmptyBorder;
 
@@ -33,7 +34,8 @@ public class CartView extends JDialog implements ActionListener{
 	private JPanel topPanel;
 	private JTextField tfTamTinh,tfThueVAT,tfTongTien;
 	private JTextField tfIDSanPham,tfDonGia,tfSoLuong,tfTienChoSP;
-	
+	 private JProgressBar progressBar; 
+	 
 	private TableBookPanel tableBookPanel;
 	private TableMoviesPanel tableMoviesPanel;
 	private TableMusicPanel tableMusicPanel;
@@ -68,11 +70,13 @@ public class CartView extends JDialog implements ActionListener{
 		setSize(400, 400);
 		setLayout(new BorderLayout(10,10));
 		add(tableCart,BorderLayout.CENTER);
-		add(createButtonPanel(),BorderLayout.SOUTH);
-		
+
+       add(createButtonPanel(), BorderLayout.SOUTH);
+
 		setTitle("Giỏ hàng");
 		setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
 		setLocationRelativeTo(null);
+		
 		setVisible(true);
 	}
 	
@@ -110,6 +114,8 @@ public class CartView extends JDialog implements ActionListener{
 			
 			if(index >=0) {
 				listDH.remove(index);
+				clientUI.setListDH(listDH);
+				
 				long tienTamTinh = 0;
 				for(MuaHang m: listDH) {
 					tienTamTinh += m.getDonGia()*m.getSoLuong();
@@ -135,10 +141,26 @@ public class CartView extends JDialog implements ActionListener{
 		}
 		
 		if(e.getSource() == btnDatHang) {
+		
+//			progressBar = new JProgressBar();
+//	        
+//	        progressBar.setStringPainted(true);
+//	      
+//	        progressBar.setBorderPainted(true);
+//			 progressBar.setString("Please wait ...");
+//		        progressBar.setIndeterminate(true);
+//		        progressBar.setVisible(true);
+//		        
+//		       
+//		        this.add(progressBar,BorderLayout.NORTH);
+//		        this.validate();
+//		        this.repaint();
+			
 			if(listDH.isEmpty()) {
 				JOptionPane.showMessageDialog(null, "Giỏ hàng rỗng, vui lòng chọn hàng để đặt");
 			}
 			else {
+				
 				action();
 			}
 	
@@ -148,11 +170,16 @@ public class CartView extends JDialog implements ActionListener{
 	public void action() {
 		
 		
+		
+		System.out.println("list before send order");
+		for(MuaHang mh :listDH) {
+			System.out.println(mh.getIdSanPham());
+		}
 		long tienTamTinh = 0;
 		for(MuaHang m: listDH) {
 			tienTamTinh += m.getDonGia()*m.getSoLuong();
 		}
-		
+		System.out.println("tien tam tinh: "+tienTamTinh);
 		
 		///////////////////////////////////////////////////
 		//tienTamTinh += tienTamTinh*0.1;
@@ -161,59 +188,81 @@ public class CartView extends JDialog implements ActionListener{
 			JOptionPane.showMessageDialog(null, "Bạn không đủ tiền để thực hiện giao dịch", "Cảnh báo", JOptionPane.WARNING_MESSAGE);
 		}
 		else {
-			client.sendOrderRequest(listDH,clientUI.id);
-			JOptionPane.showMessageDialog(null, "Bạn đã đặt hàng thành công");
-			dispose();
-			coin = coin -tienTamTinh;
-			clientUI.setCoin(coin);
-			
-			//update coin of customer in database
-			client.updateCoin(username, coin);
 
-			//update value coin shown on top panel
-			topPanel.remove(topPanel.getComponent(1));
-			
-			JLabel lbCoin = new JLabel("Coin : "+coin);
-			lbCoin.setHorizontalAlignment(JLabel.CENTER);
-			topPanel.add(lbCoin,BorderLayout.EAST);
-			
-			topPanel.validate();
-			topPanel.repaint();
+		       
+			System.out.println("list before send order");
+			for(MuaHang mh :listDH) {
+				System.out.println(mh.getIdSanPham());
+			}
 		
-			//update the number of product in table sanpham
-			for(MuaHang dh:listDH) {
-				String idsanpham = dh.getIdSanPham();
-				int soluong = client.getSoLuongTonKho(idsanpham) - dh.getSoLuong();
+			if(client.sendOrderRequest(listDH,clientUI.id)) {
+		
+                
+				JOptionPane.showMessageDialog(null, "Bạn đã đặt hàng thành công");
+				dispose();
+			
+				/*
+				coin = coin -tienTamTinh;
+				System.out.println("coin after minus: "+ coin);
+				clientUI.setCoin(coin);
 				
-				client.updateNumberProduct(idsanpham,soluong);
+				//update coin of customer in database
+				client.updateCoin(username, coin);
+
+				//update value coin shown on top panel
+				topPanel.remove(topPanel.getComponent(1));
+				DecimalFormat format = (DecimalFormat) DecimalFormat.getCurrencyInstance(new Locale("vi","VN"));
+				String strCoin = format.format(coin).toString();
+				
+				JLabel lbCoin = new JLabel("Coin : "+strCoin);
+				lbCoin.setHorizontalAlignment(JLabel.CENTER);
+				topPanel.add(lbCoin,BorderLayout.EAST);
+				
+				topPanel.validate();
+				topPanel.repaint();
+			
+				//update the number of product in table sanpham
+				for(MuaHang dh:listDH) {
+					String idsanpham = dh.getIdSanPham();
+					int soluong = client.getSoLuongTonKho(idsanpham) - dh.getSoLuong();
+					
+					client.updateNumberProduct(idsanpham,soluong);
+				}
+				
+			
+				
+				//update the number shown in 3 table
+				clientUI.setListBook(client.getAllBookFromServer(clientUI.getPageBook()));
+				clientUI.setListMovie(client.getAllMoviesFromServer(clientUI.getPageMovies()));
+				clientUI.setListMusic(client.getAllMusicFromServer(clientUI.getPageMusic()));
+				
+				clientUI.initTable();
+				*/
+				
+				//reset value in text field
+				tfIDSanPham.setText(null);
+				tfDonGia.setText(null);
+				tfSoLuong.setText(null);
+				tfTienChoSP.setText(null);
+				
+				tfTamTinh.setText(null);
+				tfTongTien.setText(null);
+				
+				
+			
+				
+				//update list in listMH
+				listDH.removeAll(listDH);
+				clientUI.setListDH(listDH);
+				tableCart.updateTable(listDH);
+
+			}
+			else {
+				JOptionPane.showMessageDialog(null, "Đặt hàng thất bại");
 			}
 			
-		
-			
-			//update the number shown in 3 table
-			clientUI.setListBook(client.getAllBookFromServer());
-			clientUI.setListMovie(client.getAllMoviesFromServer());
-			clientUI.setListMusic(client.getAllMusicFromServer());
-			
-			clientUI.initTable();
 			
 			
-			//reset value in textfield
-			tfIDSanPham.setText(null);
-			tfDonGia.setText(null);
-			tfSoLuong.setText(null);
-			tfTienChoSP.setText(null);
-			
-			tfTamTinh.setText(null);
-			tfTongTien.setText(null);
-			
-			
-		
-			
-			//update list in listMH
-			listDH.removeAll(listDH);
-			tableCart.updateTable(listDH);
-
 		}
 	}
 

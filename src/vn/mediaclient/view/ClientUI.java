@@ -4,8 +4,10 @@ import java.awt.BorderLayout;
 import java.awt.Dimension;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 
 import javax.swing.BorderFactory;
 import javax.swing.JButton;
@@ -51,6 +53,10 @@ public class ClientUI extends JFrame implements ActionListener{
 	private String username;
 	private long coin;
 	
+	private int pageBook;
+	private int pageMovies;
+	private int pageMusic;
+	
 	private Client client;
 	
 	public ClientUI(String username,Client client) {
@@ -65,11 +71,12 @@ public class ClientUI extends JFrame implements ActionListener{
 		setTitle("MediaOne (Client)");
 		
 		funcClientPanel = new FuncClientPanel();
+		
 		listDH = new ArrayList<>();
 		
-		listBook 	= client.getAllBookFromServer();
-		listMovie 	= client.getAllMoviesFromServer();
-		listMusic 	= client.getAllMusicFromServer();
+		listBook 	= client.getAllBookFromServer(0); pageBook =0;
+		listMovie 	= client.getAllMoviesFromServer(0); pageMovies =0;
+		listMusic 	= client.getAllMusicFromServer(0); pageMusic =0;
 		
 	
 		
@@ -103,7 +110,10 @@ public class ClientUI extends JFrame implements ActionListener{
 		coin = client.getCoinCus(username);
 		System.out.println(coin);
 		JLabel label = new JLabel("Xin chào bạn,   "+name+"  !");
-		JLabel lbCoin = new JLabel("Coin : "+coin);
+		
+		DecimalFormat format = (DecimalFormat) DecimalFormat.getCurrencyInstance(new Locale("vi","VN"));
+		String strCoin = format.format(coin).toString();
+		JLabel lbCoin = new JLabel("Coin : "+ strCoin);
 		
 		label.setHorizontalAlignment(JLabel.LEFT);
 		lbCoin.setHorizontalAlignment(JLabel.CENTER);
@@ -182,29 +192,36 @@ public class ClientUI extends JFrame implements ActionListener{
 			public void actionPerformed(ActionEvent e) {
 				String serial = JOptionPane.showInputDialog("Mời bạn nhập mã thẻ");
 				
-				if(client.checkSerial(serial)) {
-				
-					
-					long value = client.getValueCard(serial);
-					
-					coin += value;
-					
-					client.updateCoin(username, coin);
-					
-					
-					
-					topPanel.remove(topPanel.getComponent(1));
-					
-					JLabel lbCoin = new JLabel("Coin : "+coin);
-					lbCoin.setHorizontalAlignment(JLabel.CENTER);
-					topPanel.add(lbCoin,BorderLayout.EAST);
-					
-					topPanel.validate();
-					topPanel.repaint();
-					JOptionPane.showMessageDialog(null, "Nạp thẻ thành công");
+				if(serial.equals(null) || serial.equals("")) {
+					return;
 				}
 				else {
-					JOptionPane.showMessageDialog(null, "Nạp thẻ thất bại");
+					if(client.checkSerial(serial)) {
+						
+						
+						long value = client.getValueCard(serial);
+						
+						coin += value;
+						
+						client.updateCoin(username, coin);
+						
+						
+						
+						topPanel.remove(topPanel.getComponent(1));
+						DecimalFormat format = (DecimalFormat) DecimalFormat.getCurrencyInstance(new Locale("vi","VN"));
+						String strCoin = format.format(coin).toString();
+						
+						JLabel lbCoin = new JLabel("Coin : "+strCoin);
+						lbCoin.setHorizontalAlignment(JLabel.CENTER);
+						topPanel.add(lbCoin,BorderLayout.EAST);
+						
+						topPanel.validate();
+						topPanel.repaint();
+						JOptionPane.showMessageDialog(null, "Nạp thẻ thành công");
+					}
+					else {
+						JOptionPane.showMessageDialog(null, "Nạp thẻ thất bại");
+					}
 				}
 				
 			}
@@ -212,16 +229,7 @@ public class ClientUI extends JFrame implements ActionListener{
 	}
 	
 	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
+
 	public void initRefresh() {
 		btnRefresh.addActionListener(new ActionListener() {
 			
@@ -230,17 +238,17 @@ public class ClientUI extends JFrame implements ActionListener{
 				int now = tabbedProduct.getSelectedIndex();
 				
 				if(now == 0) {
-					List<Sach> list = client.getAllBookFromServer();
+					List<Sach> list = client.getAllBookFromServer(pageBook);
 					listBook = list;
 					tabbedProduct.getTableBookPanel().updateTableClient(list);
 				}
 				else if(now == 1) {
-					List<DiaPhim> list = client.getAllMoviesFromServer();
+					List<DiaPhim> list = client.getAllMoviesFromServer(pageMovies);
 					listMovie = list;
 					tabbedProduct.getTableMoviesPanel().updateTableClient(list);
 				}
 				else if(now == 2) {
-					List<DiaNhac> list = client.getAllMusicFromServer();
+					List<DiaNhac> list = client.getAllMusicFromServer(pageMusic);
 					listMusic = list;
 					tabbedProduct.getTableMusicPanel().updateTableClient(list);
 				}
@@ -249,6 +257,46 @@ public class ClientUI extends JFrame implements ActionListener{
 		});
 	}
 	
+	
+	
+	public void display() {
+		System.out.println("List CLIENT");
+		for(MuaHang m : listDH) {
+		
+			System.out.println(m.getIdSanPham());
+		}
+	}
+	
+	
+	
+	
+	
+	
+	
+	public int getPageBook() {
+		return pageBook;
+	}
+
+	public void setPageBook(int pageBook) {
+		this.pageBook = pageBook;
+	}
+
+	public int getPageMovies() {
+		return pageMovies;
+	}
+
+	public void setPageMovies(int pageMovies) {
+		this.pageMovies = pageMovies;
+	}
+
+	public int getPageMusic() {
+		return pageMusic;
+	}
+
+	public void setPageMusic(int pageMusic) {
+		this.pageMusic = pageMusic;
+	}
+
 	public JButton getBtnRefresh() {
 		return btnRefresh;
 	}

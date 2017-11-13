@@ -2,11 +2,14 @@ package vn.mediaclient.view;
 
 
 import java.awt.BorderLayout;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
 import java.util.List;
 import java.util.Locale;
 
+import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
@@ -20,13 +23,14 @@ import vn.media.models.Sach;
 
 
 
-public class TableBookPanel extends JPanel{
+public class TableBookPanel extends JPanel implements ActionListener{
 	private JTable table;
 	private JLabel lbName;
 	private JScrollPane scroll;
-
+	private JButton btnTrangTruoc,btnTrangSau;
 	private String[] columns = { "ID", "Tên Sách", "Nhà xuất bản", "Tác giả", "Số lượng tồn kho", "giá mua","giá bán","ngày nhập hàng cuối" };
 	private String[] columnsClient = { "ID", "Tên Sách", "Nhà xuất bản", "Tác giả", "Số lượng tồn kho","Đơn giá" };
+	private int currentPage;
 	
 	public TableBookPanel() {
 		setLayout(new BorderLayout(10, 0));
@@ -51,9 +55,21 @@ public class TableBookPanel extends JPanel{
 		scroll.setViewportView(table);
 		
 		add(scroll, BorderLayout.CENTER);
-		
+		add(pagePanel(),BorderLayout.SOUTH);
 	}
 
+	private JPanel pagePanel() {
+		JPanel panel = new JPanel();
+		panel.setLayout(new BorderLayout());
+		btnTrangTruoc = new JButton("Trang Trước");		btnTrangTruoc.addActionListener(this);
+		btnTrangSau   = new JButton("Trang Sau");		btnTrangSau.addActionListener(this);
+		
+		panel.add(btnTrangTruoc, BorderLayout.WEST);
+		panel.add(btnTrangSau, BorderLayout.EAST);
+		
+		return panel;
+	}
+	
 	private void loadData(JTable table) {
 		String[][] data = null;
 
@@ -131,6 +147,29 @@ public class TableBookPanel extends JPanel{
 	public void setScroll(JScrollPane scroll) {
 		this.scroll = scroll;
 	}
+	public int getCurrentPage() {
+		return currentPage;
+	}
+
+	public void setCurrentPage(int currentPage) {
+		this.currentPage = currentPage;
+	}
+
+	public JButton getBtnTrangTruoc() {
+		return btnTrangTruoc;
+	}
+
+	public void setBtnTrangTruoc(JButton btnTrangTruoc) {
+		this.btnTrangTruoc = btnTrangTruoc;
+	}
+
+	public JButton getBtnTrangSau() {
+		return btnTrangSau;
+	}
+
+	public void setBtnTrangSau(JButton btnTrangSau) {
+		this.btnTrangSau = btnTrangSau;
+	}
 
 	public String[] getColumns() {
 		return columns;
@@ -138,5 +177,11 @@ public class TableBookPanel extends JPanel{
 
 	public void setColumns(String[] columns) {
 		this.columns = columns;
+	}
+
+	@Override
+	public void actionPerformed(ActionEvent e) {
+		// TODO Auto-generated method stub
+		
 	}
 }

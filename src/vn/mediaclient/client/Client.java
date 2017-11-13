@@ -5,7 +5,6 @@ import java.io.DataOutputStream;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
-import java.net.InetAddress;
 import java.net.Socket;
 import java.net.UnknownHostException;
 import java.util.List;
@@ -24,15 +23,18 @@ import vn.mediaclient.controller.SearchBookClient;
 import vn.mediaclient.controller.SearchMovieClient;
 import vn.mediaclient.controller.SearchMusicClient;
 import vn.mediaclient.controller.SeeCartController;
+import vn.mediaclient.controller.TableBookController;
+import vn.mediaclient.controller.TableMoviesController;
+import vn.mediaclient.controller.TableMusicController;
 import vn.mediaclient.view.ClientUI;
 
 public class Client {
-	public static final int LOGIN = 1, LOGIN_SUCCESS = 2, LOGIN_FAIL = 3, GET_ALL_BOOK = 4, GET_ALL_MOVIE = 5,
-			GET_ALL_MUSIC = 6, GET_CUSTOMER_NAME = 7, GET_COIN_CUS = 8, GET_SLTK = 9, UPDATE_COIN = 10,
-			UPDATE_NUMBER_PRODUCT = 11, UPDATE_CUSTOMER_INFO = 12, GET_CUSTOMER = 13, CHECK_SERIAL = 14,
-			GET_VALUE_CARD = 15, CHECK_EXIST_USERNAME = 16, ADD_CUSTOMER = 17, CLOSE_REQUEST = 18,
-			ORDER_REQUEST=19;
-
+	public static final int LOGIN=1,LOGIN_SUCCESS=2,LOGIN_FAIL=3,GET_ALL_BOOK=4,GET_ALL_MOVIE=5
+			,GET_ALL_MUSIC=6,GET_CUSTOMER_NAME=7,GET_COIN_CUS=8,GET_SLTK=9,UPDATE_COIN=10
+					,UPDATE_NUMBER_PRODUCT=11,UPDATE_CUSTOMER_INFO=12
+					,GET_CUSTOMER=13,CHECK_SERIAL=14,GET_VALUE_CARD=15,CHECK_EXIST_USERNAME=16
+							,ADD_CUSTOMER=17,CLOSE_REQUEST=18,ORDER_REQUEST=19
+	,COUNT_BOOK=20,COUNT_MOVIE=21,COUNT_MUSIC=22;
 	public Socket socket;
 	public DataInputStream in;
 	public DataOutputStream out;
@@ -42,8 +44,9 @@ public class Client {
 	public Client() {
 		try {
 				
-			socket = new Socket("42.112.139.16", 1997);
-				
+			//socket = new Socket("2405:4800:1484:9a0e:edb6:f52f:cb40:c0c9", 2000);
+			socket = new Socket("localhost", 2000);
+			
 				in = new DataInputStream(socket.getInputStream());
 				out = new DataOutputStream(socket.getOutputStream());
 				ois = new ObjectInputStream(socket.getInputStream());
@@ -60,7 +63,7 @@ public class Client {
 
 	public void loginSuccess(String username) {
 
-		getAllBookFromServer();
+	
 		ClientUI clientUI = new ClientUI(username, this);
 		new ChangeTableClient(clientUI);
 		new SearchBookClient(clientUI);
@@ -69,7 +72,10 @@ public class Client {
 		new ClickTableClient(clientUI);
 		new AddProductClient(clientUI, this);
 		new SeeCartController(clientUI, this);
-
+		new TableBookController(clientUI, this);
+		new TableMoviesController(clientUI, this);
+		new TableMusicController(clientUI, this);
+		
 		clientUI.addWindowListener(new java.awt.event.WindowAdapter() {
 			@Override
 			public void windowClosing(java.awt.event.WindowEvent windowEvent) {
@@ -115,11 +121,14 @@ public class Client {
 		return false;
 	}
 
-	public List<Sach> getAllBookFromServer() {
+	public List<Sach> getAllBookFromServer(int page) {
 		try {
 			out.writeInt(GET_ALL_BOOK);
 			out.flush();
-
+			
+			out.writeInt(page);
+			out.flush();
+			
 			List<Sach> list = (List<Sach>) ois.readObject();
 
 			return list;
@@ -134,12 +143,15 @@ public class Client {
 		return null;
 	}
 
-	public List<DiaPhim> getAllMoviesFromServer() {
+	public List<DiaPhim> getAllMoviesFromServer(int page) {
 		// TODO Auto-generated method stub
 		try {
 			out.writeInt(GET_ALL_MOVIE);
 			out.flush();
 
+			out.writeInt(page);
+			out.flush();
+			
 			List<DiaPhim> list = (List<DiaPhim>) ois.readObject();
 			return list;
 		} catch (IOException e) {
@@ -153,12 +165,15 @@ public class Client {
 		return null;
 	}
 
-	public List<DiaNhac> getAllMusicFromServer() {
+	public List<DiaNhac> getAllMusicFromServer(int page) {
 		// TODO Auto-generated method stub
 		try {
 			out.writeInt(GET_ALL_MUSIC);
 			out.flush();
 
+			out.writeInt(page);
+			out.flush();
+			
 			List<DiaNhac> list = (List<DiaNhac>) ois.readObject();
 			return list;
 		} catch (IOException e) {
@@ -230,6 +245,7 @@ public class Client {
 
 	public void updateCoin(String username, long coin) {
 		try {
+			System.out.println("coin in client: "+ coin);
 			out.writeInt(UPDATE_COIN);
 			out.flush();
 
@@ -266,7 +282,8 @@ public class Client {
 
 	public void editCustomer(KhachHang kh) {
 		try {
-			out.write(UPDATE_CUSTOMER_INFO);
+			System.out.println(kh.getNgaySinh());
+			out.writeInt(UPDATE_CUSTOMER_INFO);
 			out.flush();
 
 			oos.writeObject(kh);
@@ -379,8 +396,9 @@ public class Client {
 		return false;
 	}
 
-	public void sendOrderRequest(List<MuaHang> listDH,String idkhachhang) {
+	public boolean sendOrderRequest(List<MuaHang> listDH,String idkhachhang) {
 		try {
+		
 			out.writeInt(ORDER_REQUEST);
 			out.flush();
 
@@ -389,14 +407,60 @@ public class Client {
 			
 			oos.writeObject(listDH);
 			oos.flush();
-			
-			
+	
+			boolean check = in.readBoolean();
+			return check;
 		
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+	return false;
+	}
+
+	public int getCountBook() {
+		try {
+			out.writeInt(COUNT_BOOK);
+			out.flush();
+			
+			int count = in.readInt();
+			return count;
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+
+		return 0;
+	}
 	
+	public int getCountMovies() {
+		try {
+			out.writeInt(COUNT_MOVIE);
+			out.flush();
+			
+			int count = in.readInt();
+			return count;
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+
+		return 0;
+	}
+	
+	public int getCountMusic() {
+		try {
+			out.writeInt(COUNT_MUSIC);
+			out.flush();
+			
+			int count = in.readInt();
+			return count;
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+
+		return 0;
 	}
 
 }

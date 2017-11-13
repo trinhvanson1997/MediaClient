@@ -130,7 +130,7 @@ public class LoginBox extends JFrame implements ActionListener, KeyListener {
 	public void actionPerformed(ActionEvent e) {
 		if (e.getSource() == btnClose) {
 			client.sendCloseRequest();
-			this.dispose();
+			System.exit(0);
 		}
 
 		if (e.getSource() == btnLogin) {
@@ -154,11 +154,6 @@ public class LoginBox extends JFrame implements ActionListener, KeyListener {
 		if (check==true) {
 			dispose();
 				client.loginSuccess( username);
-			
-				
-			
-
-			
 
 		}
 		else {

@@ -37,14 +37,18 @@ public class AddProductClient {
 		tfThueVAT		= clientUI.getFuncClientPanel().getTfThueVAT();
 		tfTongTien		= clientUI.getFuncClientPanel().getTfTongTien();
 		
+		listDH = clientUI.getListDH();
 		
-		this.listDH = clientUI.getListDH();
-		DecimalFormat format = (DecimalFormat) DecimalFormat.getCurrencyInstance(new Locale("vi","VN"));
 		
 		btnThemVaoGIo.addActionListener(new ActionListener() {
 			
 			@Override
 			public void actionPerformed(ActionEvent e) {
+				
+				
+				DecimalFormat format = (DecimalFormat) DecimalFormat.getCurrencyInstance(new Locale("vi","VN"));
+				
+				
 				int soluongtonkho =client.getSoLuongTonKho(tfIDSanPham.getText());
 				System.out.println("so luong ton kho:"+soluongtonkho);
 				
@@ -79,6 +83,7 @@ public class AddProductClient {
 						
 						listDH.add(dh);
 						
+						clientUI.setListDH(listDH);
 						long tienTamTinh = 0;
 						for(MuaHang d: listDH) {
 							tienTamTinh += d.getDonGia()*d.getSoLuong();
@@ -92,7 +97,7 @@ public class AddProductClient {
 						
 						JOptionPane.showMessageDialog(null, "Thêm thành công");
 						
-					
+					clientUI.display();
 					}
 					
 				}

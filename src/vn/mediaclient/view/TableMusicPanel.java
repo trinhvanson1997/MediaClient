@@ -2,12 +2,15 @@ package vn.mediaclient.view;
 
 
 import java.awt.BorderLayout;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
 import java.util.List;
 import java.util.Locale;
 
 import javax.swing.BorderFactory;
+import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
@@ -17,11 +20,12 @@ import javax.swing.table.DefaultTableModel;
 
 import vn.media.models.DiaNhac;
 
-public class TableMusicPanel extends JPanel{
+public class TableMusicPanel extends JPanel implements ActionListener{
 	private JTable table;
 	private JLabel lbName;
 	private JScrollPane scroll;
-
+	private int currentPage;
+	private JButton btnTrangTruoc,btnTrangSau;
 	private String[] columns = { "ID", "Tên đĩa nhạc", "Thể loại", "Ca sĩ", "Số lượng tồn kho", "giá mua","giá bán","ngày nhập hàng cuối" };
 	private String[] columnsClient = { "ID", "Tên đĩa nhạc", "Thể loại", "Ca sĩ", "Số lượng tồn kho", "Đơn giá" };
 	public TableMusicPanel() {
@@ -48,7 +52,7 @@ public class TableMusicPanel extends JPanel{
 		scroll.setViewportView(table);
 		//add(namePanel(),BorderLayout.PAGE_START);
 		add(scroll, BorderLayout.CENTER);
-		
+		add(pagePanel(),BorderLayout.SOUTH);
 	}
 
 //	public JPanel createTablePanel() {
@@ -69,6 +73,20 @@ public class TableMusicPanel extends JPanel{
 			
 			return panel;
 	}
+	
+	private JPanel pagePanel() {
+		JPanel panel = new JPanel();
+		panel.setLayout(new BorderLayout());
+		btnTrangTruoc = new JButton("Trang Trước");		btnTrangTruoc.addActionListener(this);
+		btnTrangSau   = new JButton("Trang Sau");		btnTrangSau.addActionListener(this);
+		
+		panel.add(btnTrangTruoc, BorderLayout.WEST);
+		panel.add(btnTrangSau, BorderLayout.EAST);
+		
+		return panel;
+	}
+	
+	
 	private void loadData(JTable table) {
 		String[][] data = null;
 
@@ -128,6 +146,30 @@ public class TableMusicPanel extends JPanel{
 	}
 
 	
+	public int getCurrentPage() {
+		return currentPage;
+	}
+
+	public void setCurrentPage(int currentPage) {
+		this.currentPage = currentPage;
+	}
+
+	public JButton getBtnTrangTruoc() {
+		return btnTrangTruoc;
+	}
+
+	public void setBtnTrangTruoc(JButton btnTrangTruoc) {
+		this.btnTrangTruoc = btnTrangTruoc;
+	}
+
+	public JButton getBtnTrangSau() {
+		return btnTrangSau;
+	}
+
+	public void setBtnTrangSau(JButton btnTrangSau) {
+		this.btnTrangSau = btnTrangSau;
+	}
+
 	public JTable getTable() {
 		return table;
 	}
@@ -150,5 +192,11 @@ public class TableMusicPanel extends JPanel{
 
 	public void setColumns(String[] columns) {
 		this.columns = columns;
+	}
+
+	@Override
+	public void actionPerformed(ActionEvent e) {
+		// TODO Auto-generated method stub
+		
 	}
 }

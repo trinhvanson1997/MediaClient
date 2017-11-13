@@ -110,7 +110,7 @@ public class RegisterBox extends JDialog implements ActionListener {
 					Timestamp date = new Timestamp(format.parse(tfNgaySinh.getText()).getTime());
 					
 					KhachHang kh = new KhachHang("", tfHoTen.getText(), date,
-							tfDiachi.getText(), tfSDT.getText(),0,tfUsername.getText(),tfPassword.getText());
+							tfDiachi.getText(), tfSDT.getText(),200000,tfUsername.getText(),tfPassword.getText());
 					client.addCus(kh);
 					
 					
