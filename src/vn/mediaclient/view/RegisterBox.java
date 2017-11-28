@@ -1,6 +1,8 @@
 package vn.mediaclient.view;
 
 import java.awt.BorderLayout;
+import java.awt.Color;
+import java.awt.Font;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -52,13 +54,15 @@ public class RegisterBox extends JDialog implements ActionListener {
 		
 		
 		tfHoTen    = new JTextField(15);
-		tfNgaySinh = new JTextField(15);
+		tfNgaySinh = new JTextField(15);  tfNgaySinh.setToolTipText("vd: 1/9/1997");
 		tfDiachi   = new JTextField(15);
 		tfSDT      = new JTextField(15);
 		//tfCoin    = new JTextField(15);
 		tfUsername = new JTextField(15);
 		tfPassword = new JTextField(15);
 		
+	
+		//tfHoTen.setBackground(Color.RED);
 		btnThem    = new JButton("ĐĂNG KÝ");		btnThem.addActionListener(this);
 		btnHuy     = new JButton("HỦY ");		btnHuy.addActionListener(this);
 		
@@ -84,8 +88,19 @@ public class RegisterBox extends JDialog implements ActionListener {
 		
 		p3.add(btnThem);		p3.add(btnHuy);
 		
+		JPanel p4 = new JPanel(new BorderLayout(0,5));
+		JLabel label = new JLabel("* Chú ý: Tất cả các trường dữ liệu không được để trống");
+		label.setForeground(Color.RED);
+		
+		Font font = label.getFont().deriveFont(Font.ITALIC, 10f);
+		label.setFont(font);
+		label.setHorizontalAlignment(JLabel.CENTER);
+		
+		p4.add(label,BorderLayout.NORTH);
+		p4.add(p3,BorderLayout.CENTER);
+		
 		add(p1,BorderLayout.WEST);
-		add(p3,BorderLayout.SOUTH);
+		add(p4,BorderLayout.SOUTH);
 		add(p2,BorderLayout.CENTER);
 	
 		
@@ -114,7 +129,7 @@ public class RegisterBox extends JDialog implements ActionListener {
 					client.addCus(kh);
 					
 					
-					JOptionPane.showMessageDialog(null, "Đăng ký thành công !");
+					JOptionPane.showMessageDialog(null, "Đăng ký thành công \nBạn được nhận 200.000đ trong tài khoản !");
 					
 					
 					dispose();
@@ -135,21 +150,42 @@ public class RegisterBox extends JDialog implements ActionListener {
 
 	}
 	
-	private boolean checkFormat(){
-	 if(client.checkExistUsername(tfUsername.getText())) {
-			JOptionPane.showMessageDialog(null, "Username '"+tfUsername.getText()+"' đã tồn tại!", "Warning",
-					WARNING_MESSAGE);
+	private boolean checkFormat() {
+		if (tfHoTen.getText().equals(null) || tfHoTen.getText().equals("")) {
+			JOptionPane.showMessageDialog(null, "Bạn chưa nhập họ tên", "Cảnh báo",
+					JOptionPane.WARNING_MESSAGE);
 			return false;
 		}
-		else if(tfHoTen.getText().equals(null) || tfHoTen.getText().equals("") ||
-				tfNgaySinh.getText().equals(null) || tfNgaySinh.getText().equals("") ||
-				tfDiachi.getText().equals(null) || tfDiachi.getText().equals("") ||
-				tfSDT.getText().equals(null) || tfSDT.getText().equals("") ||
-				//tfCoin.getText().equals(null) || tfCoin.getText().equals("") ||
-				tfUsername.getText().equals(null) || tfUsername.getText().equals("") ||
-				tfPassword.getText().equals(null) || tfPassword.getText().equals(""))
-		{
-			JOptionPane.showMessageDialog(null, "Các trường dữ liệu không được để trống","Cảnh báo",JOptionPane.WARNING_MESSAGE);
+
+		if (tfNgaySinh.getText().equals(null) || tfNgaySinh.getText().equals("")) {
+			JOptionPane.showMessageDialog(null, "Bạn chưa nhập ngày sinh", "Cảnh báo",
+					JOptionPane.WARNING_MESSAGE);
+			return false;
+		}
+		if (tfDiachi.getText().equals(null) || tfDiachi.getText().equals("")) {
+			JOptionPane.showMessageDialog(null, "Bạn chưa nhập địa chỉ", "Cảnh báo",
+					JOptionPane.WARNING_MESSAGE);
+			return false;
+		}
+
+		if (tfSDT.getText().equals(null) || tfSDT.getText().equals("")) {
+			JOptionPane.showMessageDialog(null, "Bạn chưa nhập số điện thoại", "Cảnh báo",
+					JOptionPane.WARNING_MESSAGE);
+			return false;
+		}
+
+		if (tfUsername.getText().equals(null) || tfUsername.getText().equals("")) {
+			JOptionPane.showMessageDialog(null, "Bạn chưa nhập username", "Cảnh báo",
+					JOptionPane.WARNING_MESSAGE);
+			return false;
+		}
+		if (tfPassword.getText().equals(null) || tfPassword.getText().equals("")) {
+			JOptionPane.showMessageDialog(null, "Bạn chưa nhập mật khẩu", "Cảnh báo",
+					JOptionPane.WARNING_MESSAGE);
+			return false;
+		} else if (client.checkExistUsername(tfUsername.getText())) {
+			JOptionPane.showMessageDialog(null, "Username '" + tfUsername.getText() + "' đã tồn tại!", "Warning",
+					WARNING_MESSAGE);
 			return false;
 		}
 

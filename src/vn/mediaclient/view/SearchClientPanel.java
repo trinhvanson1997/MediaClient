@@ -4,6 +4,7 @@ import java.awt.BorderLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
+import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JLabel;
@@ -34,6 +35,8 @@ public class SearchClientPanel implements ActionListener {
 	
 	public JPanel createSearchBookPanel() {
 		btnTimKiemSach  = createButtons("TÌM KIẾM SÁCH");
+		btnTimKiemSach.setIcon(new ImageIcon(getClass().getResource("/search.png")));
+		
 		cbTypeBook = new JComboBox<>(sBook);
 		tfSearchBook = new JTextField(30);
 		
@@ -67,6 +70,7 @@ public class SearchClientPanel implements ActionListener {
 		panelBtn.add(new JLabel("Tìm kiếm theo:"),BorderLayout.WEST);
 		panelBtn.add(cbTypeMovie,BorderLayout.CENTER);
 		panelBtn.add(btnTimKiemPhim,BorderLayout.EAST);
+		btnTimKiemPhim.setIcon(new ImageIcon(getClass().getResource("/search.png")));
 		
 		panel.add(new JLabel("Ô tìm kiếm:"),BorderLayout.WEST);
 		panel.add(tfSearchMovie, BorderLayout.CENTER);
@@ -76,6 +80,8 @@ public class SearchClientPanel implements ActionListener {
 	
 	public JPanel createSearchMusicPanel() {
 		btnTimKiemNhac  = createButtons("TÌM KIẾM NHẠC");
+		btnTimKiemNhac.setIcon(new ImageIcon(getClass().getResource("/search.png")));
+		
 		cbTypeMusic = new JComboBox<>(sMusic);
 		tfSearchMusic = new JTextField(30);
 		

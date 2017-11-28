@@ -48,9 +48,9 @@ public class CartView extends JDialog implements ActionListener{
 		
 		this.listDH = clientUI.getListDH();
 		
-		this.coin = clientUI.getCoin();
-		this.username =clientUI.getUsername();
-		this.topPanel =clientUI.getTopPanel();
+		this.coin 		= clientUI.getCoin();
+		this.username 	= clientUI.getUsername();
+		this.topPanel 	= clientUI.getTopPanel();
 		
 		this.tfTamTinh 		= clientUI.getFuncClientPanel().getTfTamTinh();
 		this.tfThueVAT		= clientUI.getFuncClientPanel().getTfThueVAT();
@@ -61,9 +61,9 @@ public class CartView extends JDialog implements ActionListener{
 		this.tfSoLuong 		= clientUI.getFuncClientPanel().getTfSoLuong();
 		this.tfTienChoSP 	= clientUI.getFuncClientPanel().getTfTienChoSP();
 		
-		this.tableBookPanel = clientUI.getTabbedProduct().getTableBookPanel();
-		this.tableMoviesPanel =  clientUI.getTabbedProduct().getTableMoviesPanel();
-		this.tableMusicPanel =  clientUI.getTabbedProduct().getTableMusicPanel();
+		this.tableBookPanel 	=  clientUI.getTabbedProduct().getTableBookPanel();
+		this.tableMoviesPanel 	=  clientUI.getTabbedProduct().getTableMoviesPanel();
+		this.tableMusicPanel 	=  clientUI.getTabbedProduct().getTableMusicPanel();
 		
 		tableCart = new TableCart();
 		tableCart.updateTable(listDH);
@@ -201,7 +201,7 @@ public class CartView extends JDialog implements ActionListener{
 				JOptionPane.showMessageDialog(null, "Bạn đã đặt hàng thành công");
 				dispose();
 			
-				/*
+				
 				coin = coin -tienTamTinh;
 				System.out.println("coin after minus: "+ coin);
 				clientUI.setCoin(coin);
@@ -220,7 +220,7 @@ public class CartView extends JDialog implements ActionListener{
 				
 				topPanel.validate();
 				topPanel.repaint();
-			
+			/*
 				//update the number of product in table sanpham
 				for(MuaHang dh:listDH) {
 					String idsanpham = dh.getIdSanPham();

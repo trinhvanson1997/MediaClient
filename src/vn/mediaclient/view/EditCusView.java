@@ -30,9 +30,11 @@ public class EditCusView extends JDialog implements ActionListener{
 	
 	private Client client;
 	private KhachHang kh;
-	public EditCusView(Client client,KhachHang kh) {
+	private ClientUI clientUI;
+	public EditCusView(ClientUI clientUI,Client client,KhachHang kh) {
 		this.client = client;
 		this.kh = kh;
+		this.clientUI = clientUI;
 		
 		setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
 		setSize(400, 300);
@@ -110,8 +112,19 @@ public class EditCusView extends JDialog implements ActionListener{
 					
 					dispose();
 					JOptionPane.showMessageDialog(null, "Sửa thông tin thành công");
-				
-					 
+					if(tfHoTen.getText().compareTo(kh.getHoTen()) != 0) {
+						clientUI.getTopPanel().remove(clientUI.getTopPanel().getComponent(0));
+						JLabel lbUser = new JLabel("Xin chào bạn,  "+tfHoTen.getText()+"  !");
+						lbUser.setHorizontalAlignment(JLabel.LEFT);
+					
+						
+						
+						clientUI.getTopPanel().add(lbUser,BorderLayout.CENTER);
+						
+						clientUI.getTopPanel().validate();
+						clientUI.getTopPanel().repaint();
+						
+					} 
 				} catch (NumberFormatException e1) {
 				
 					// TODO Auto-generated catch block

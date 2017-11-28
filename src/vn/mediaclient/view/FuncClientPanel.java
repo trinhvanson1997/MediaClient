@@ -6,6 +6,7 @@ import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
+import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
@@ -18,7 +19,7 @@ public class FuncClientPanel extends JPanel implements ActionListener{
 	private JButton btnXoaKhoiGio;
 	private JButton btnThanhToan;
 	
-	private JButton btnThongTin,btnNapTien,btnDangXuat;
+	private JButton btnThongTin,btnNapTien,btnDangXuat,btnLichSu;
 	
 	private JLabel lbSoLuong,lbIDSanPham,lbDonGia,
 					lbTamTinh,lbThueVAT,lbTongTien,lbTienChoSP;
@@ -33,7 +34,7 @@ public class FuncClientPanel extends JPanel implements ActionListener{
 		setLayout(new BorderLayout(10,10));
 		setBorder(new EmptyBorder(10, 10, 10, 10));
 		setBorder(new TitledBorder("chức năng"));
-		setPreferredSize(new Dimension(1000, 200));
+		setPreferredSize(new Dimension(1000, 230));
 		
 		add(createTopPanel(),BorderLayout.NORTH);
 		add(createLeftPanel(),BorderLayout.WEST);
@@ -48,6 +49,8 @@ public class FuncClientPanel extends JPanel implements ActionListener{
 		topPanel.setLayout(new BorderLayout());
 		
 		btnThanhToan=createButton("XEM GIỎ HÀNG VÀ TIẾN HÀNH THANH TOÁN");
+		//btnThanhToan.setIcon(new ImageIcon(getClass().getResource("/cart.png")));
+		
 		topPanel.add(btnThanhToan, BorderLayout.CENTER);
 		topPanel.setBorder(new EmptyBorder(0, 200, 0, 200));
 		return topPanel;
@@ -65,7 +68,7 @@ public class FuncClientPanel extends JPanel implements ActionListener{
 	}
 	
 	private JPanel createTFPanel() {
-		JPanel panel = new JPanel(new GridLayout(4, 2,5,5));
+		JPanel panel = new JPanel(new GridLayout(3, 2,5,5));
 		
 		lbIDSanPham = new JLabel("Mã sản phẩm  ");	tfIDSanPham = new JTextField(15); tfIDSanPham.setEditable(false);
 		lbDonGia	= new JLabel("Đơn giá      ");	tfDonGia	= new JTextField(15); tfDonGia.setEditable(false);
@@ -77,18 +80,19 @@ public class FuncClientPanel extends JPanel implements ActionListener{
 		panel.add(lbIDSanPham);	panel.add(tfIDSanPham);
 		panel.add(lbDonGia);	panel.add(tfDonGia);
 		panel.add(lbSoLuong);	panel.add(tfSoLuong);
-		panel.add(lbTienChoSP);	panel.add(tfTienChoSP);
+		//panel.add(lbTienChoSP);	panel.add(tfTienChoSP);
 		return panel;
 	}
 	
 	private JPanel createButtonPanel() {
-		JPanel panel = new JPanel(new GridLayout(1,2,5,5));
+		JPanel panel = new JPanel(new BorderLayout());
 		//panel.setBorder(new EmptyBorder(20, 20, 20, 20));
 		
 		btnThemVaoGio=createButton("THÊM VÀO GIỎ ");
+		//btnThemVaoGio.setIcon(new ImageIcon(getClass().getResource("/add.png")));
 		//btnXoaKhoiGio=createButton("XÓA KHỎI GIỎ ");
 		
-		panel.add(btnThemVaoGio);
+		panel.add(btnThemVaoGio,BorderLayout.CENTER);
 		//panel.add(btnXoaKhoiGio);
 		
 		return panel;
@@ -100,9 +104,11 @@ public class FuncClientPanel extends JPanel implements ActionListener{
 		centerPanel.setBorder(new EmptyBorder(0, 0, 0, 100));
 		//centerPanel.setBorder(new TitledBorder("Thông tin đơn hàng"));
 		
-		JPanel p1 = new JPanel(new GridLayout(3, 1,30,40));
-		JPanel p2 = new JPanel(new GridLayout(3, 1,30,40));
+		JPanel p1 = new JPanel(new GridLayout(3, 1,20,10));
+		JPanel p2 = new JPanel(new GridLayout(3, 1,20,10));
 		
+		p1.setBorder(new EmptyBorder(10, 20, 20, 0));
+		p2.setBorder(new EmptyBorder(10, 0, 20, 20));
 		lbTamTinh = new JLabel("Tạm tính    ");		tfTamTinh = new JTextField(15); tfTamTinh.setEditable(false);
 		lbThueVAT = new JLabel("Thuế (VAT)  ");		tfThueVAT = new JTextField(15); tfThueVAT.setEditable(false);
 		lbTongTien = new JLabel("Tổng tiền  ");		tfTongTien = new JTextField(15); tfTongTien.setEditable(false);
@@ -118,14 +124,19 @@ public class FuncClientPanel extends JPanel implements ActionListener{
 	}
 	
 	private JPanel createRightPanel() {
-		rightPanel = new JPanel(new GridLayout(3, 1,20,20));
+		rightPanel = new JPanel(new GridLayout(4, 1,5,5));
 		//rightPanel.setBorder(new EmptyBorder(20, 30, 30, 30));
 	
-		
+		btnLichSu = createButton("LỊCH SỬ MUA HÀNG");
 		btnThongTin = createButton("THÔNG TIN TK");
 		btnNapTien = createButton("NẠP TIỀN");
 		btnDangXuat = createButton("ĐĂNG XUẤT");
 		
+		btnThongTin.setIcon(new ImageIcon(getClass().getResource("/info.png")));
+		btnNapTien.setIcon(new ImageIcon(getClass().getResource("/coin.png")));
+		btnDangXuat.setIcon(new ImageIcon(getClass().getResource("/log_out.png")));
+		
+		rightPanel.add(btnLichSu);
 		rightPanel.add(btnThongTin);
 		rightPanel.add(btnNapTien);
 		rightPanel.add(btnDangXuat);
@@ -344,6 +355,14 @@ public class FuncClientPanel extends JPanel implements ActionListener{
 
 	public void setCenterPanel(JPanel centerPanel) {
 		this.centerPanel = centerPanel;
+	}
+
+	public JButton getBtnLichSu() {
+		return btnLichSu;
+	}
+
+	public void setBtnLichSu(JButton btnLichSu) {
+		this.btnLichSu = btnLichSu;
 	}
 	
 }

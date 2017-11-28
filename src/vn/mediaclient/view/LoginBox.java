@@ -9,6 +9,7 @@ import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.io.IOException;
 
+import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
@@ -42,7 +43,8 @@ public class LoginBox extends JFrame implements ActionListener, KeyListener {
 		setLocationRelativeTo(null);
 		setLayout(new BorderLayout(10, 10));
 		setTitle("Login Box Client");
-
+		setIconImage(new ImageIcon(getClass().getResource("/login.png")).getImage());
+		
 		add(createLabelPanel(), BorderLayout.WEST);
 		add(createTextFieldPanel(), BorderLayout.CENTER);
 		add(createButtonPanel(), BorderLayout.SOUTH);

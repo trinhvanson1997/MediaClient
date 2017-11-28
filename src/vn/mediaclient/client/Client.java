@@ -7,6 +7,10 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.Socket;
 import java.net.UnknownHostException;
+import java.sql.Timestamp;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.swing.JOptionPane;
@@ -16,9 +20,11 @@ import vn.media.models.DiaPhim;
 import vn.media.models.KhachHang;
 import vn.media.models.MuaHang;
 import vn.media.models.Sach;
+import vn.media.serialization.HistoryWait;
 import vn.mediaclient.controller.AddProductClient;
 import vn.mediaclient.controller.ChangeTableClient;
 import vn.mediaclient.controller.ClickTableClient;
+import vn.mediaclient.controller.HistoryController;
 import vn.mediaclient.controller.SearchBookClient;
 import vn.mediaclient.controller.SearchMovieClient;
 import vn.mediaclient.controller.SearchMusicClient;
@@ -34,7 +40,7 @@ public class Client {
 					,UPDATE_NUMBER_PRODUCT=11,UPDATE_CUSTOMER_INFO=12
 					,GET_CUSTOMER=13,CHECK_SERIAL=14,GET_VALUE_CARD=15,CHECK_EXIST_USERNAME=16
 							,ADD_CUSTOMER=17,CLOSE_REQUEST=18,ORDER_REQUEST=19
-	,COUNT_BOOK=20,COUNT_MOVIE=21,COUNT_MUSIC=22;
+	,COUNT_BOOK=20,COUNT_MOVIE=21,COUNT_MUSIC=22,SERVER_CLOSE=23,GET_HISTORY=24;
 	public Socket socket;
 	public DataInputStream in;
 	public DataOutputStream out;
@@ -45,8 +51,8 @@ public class Client {
 		try {
 				
 			//socket = new Socket("2405:4800:1484:9a0e:edb6:f52f:cb40:c0c9", 2000);
-			socket = new Socket("localhost", 2000);
-			
+			//socket = new Socket("localhost", 2000);
+			socket = new Socket("fe80::5507:c43d:5d84:5e4e%4", 2000);
 				in = new DataInputStream(socket.getInputStream());
 				out = new DataOutputStream(socket.getOutputStream());
 				ois = new ObjectInputStream(socket.getInputStream());
@@ -75,7 +81,7 @@ public class Client {
 		new TableBookController(clientUI, this);
 		new TableMoviesController(clientUI, this);
 		new TableMusicController(clientUI, this);
-		
+		new HistoryController(clientUI, this);
 		clientUI.addWindowListener(new java.awt.event.WindowAdapter() {
 			@Override
 			public void windowClosing(java.awt.event.WindowEvent windowEvent) {
@@ -129,13 +135,34 @@ public class Client {
 			out.writeInt(page);
 			out.flush();
 			
-			List<Sach> list = (List<Sach>) ois.readObject();
+			int size = in.readInt();
+					
+			List<Sach> list = new ArrayList<>();
+			for(int i=0;i<size;i++) {
+				List<String> tacGia = (List<String>) ois.readObject();
+				
+				String id = in.readUTF();
+				String tenSP = in.readUTF();
+				String maLoaiSP = in.readUTF();
+				int soLuongTonKho = in.readInt();
+				long giaMua = in.readLong();
+				long giaBan = in.readLong();
+				Timestamp ngayNhapHangCuoi = new Timestamp(new SimpleDateFormat("dd/MM/yyyy HH:mm:ss").parse(in.readUTF()).getTime());
+				String nhaXB = in.readUTF();
+				
+				
+				Sach s = new Sach(id, tenSP, maLoaiSP, soLuongTonKho, giaMua, giaBan, ngayNhapHangCuoi, nhaXB, tacGia);
+				list.add(s);
+			}
 
 			return list;
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		} catch (ClassNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (ParseException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
@@ -152,12 +179,35 @@ public class Client {
 			out.writeInt(page);
 			out.flush();
 			
-			List<DiaPhim> list = (List<DiaPhim>) ois.readObject();
+			int size = in.readInt();
+			
+			List<DiaPhim> list = new ArrayList<>();
+			for(int i=0;i<size;i++) {
+				List<String> dienVien = (List<String>) ois.readObject();
+				
+				String id = in.readUTF();
+				String tenSP = in.readUTF();
+				String maLoaiSP = in.readUTF();
+				int soLuongTonKho = in.readInt();
+				long giaMua = in.readLong();
+				long giaBan = in.readLong();
+				Timestamp ngayNhapHangCuoi = new Timestamp(new SimpleDateFormat("dd/MM/yyyy HH:mm:ss").parse(in.readUTF()).getTime());
+				String daoDien = in.readUTF();
+				
+				
+				DiaPhim s = new DiaPhim(id, tenSP, maLoaiSP, soLuongTonKho, giaMua, giaBan, ngayNhapHangCuoi, daoDien, dienVien);
+				list.add(s);
+			}
+
 			return list;
+			
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		} catch (ClassNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (ParseException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
@@ -174,15 +224,36 @@ public class Client {
 			out.writeInt(page);
 			out.flush();
 			
-			List<DiaNhac> list = (List<DiaNhac>) ois.readObject();
+			int size = in.readInt();
+			
+			List<DiaNhac> list = new ArrayList<>();
+			for(int i=0;i<size;i++) {
+				List<String> caSi = (List<String>) ois.readObject();
+				
+				String id = in.readUTF();
+				String tenSP = in.readUTF();
+				String maLoaiSP = in.readUTF();
+				int soLuongTonKho = in.readInt();
+				long giaMua = in.readLong();
+				long giaBan = in.readLong();
+				Timestamp ngayNhapHangCuoi = new Timestamp(new SimpleDateFormat("dd/MM/yyyy HH:mm:ss").parse(in.readUTF()).getTime());
+				String theLoai = in.readUTF();
+			
+				
+				DiaNhac s = new DiaNhac(id, tenSP, maLoaiSP, soLuongTonKho, giaMua, giaBan, ngayNhapHangCuoi, theLoai, caSi);
+				list.add(s);
+			}
 			return list;
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		} catch (ClassNotFoundException e) {
 			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+			e.printStackTrace();}
+		 catch (ParseException e) {
+	// TODO Auto-generated catch block
+	e.printStackTrace();
+}
 
 		return null;
 	}
@@ -206,12 +277,12 @@ public class Client {
 		return null;
 	}
 
-	public long getCoinCus(String username) {
+	public long getCoinCus(String id) {
 		try {
 			out.writeInt(GET_COIN_CUS);
 			out.flush();
 
-			out.writeUTF(username);
+			out.writeUTF(id);
 			out.flush();
 
 			long coin = in.readLong();
@@ -249,9 +320,11 @@ public class Client {
 			out.writeInt(UPDATE_COIN);
 			out.flush();
 
+			System.out.println("send user");
 			out.writeUTF(username);
 			out.flush();
-
+			
+			System.out.println("send coin");
 			out.writeLong(coin);
 			out.flush();
 
@@ -405,8 +478,19 @@ public class Client {
 			out.writeUTF(idkhachhang);
 			out.flush();
 			
-			oos.writeObject(listDH);
-			oos.flush();
+			out.writeInt(listDH.size());
+			out.flush();
+			
+			for(int i=0;i<listDH.size();i++) {
+				out.writeUTF(listDH.get(i).getIdSanPham());
+				out.flush();
+				
+				out.writeInt(listDH.get(i).getSoLuong());
+				out.flush();
+				
+				out.writeLong(listDH.get(i).getDonGia());
+				out.flush();
+			}
 	
 			boolean check = in.readBoolean();
 			return check;
@@ -462,5 +546,37 @@ public class Client {
 
 		return 0;
 	}
+
+	public List<HistoryWait> getHistory(String idkhachhang){
+		try {
+			out.writeInt(GET_HISTORY);
+			out.flush();
+			
+			out.writeUTF(idkhachhang);
+			out.flush();
+			
+			int Size = in.readInt();
+			
+			List<HistoryWait> list = new ArrayList<>();
+			for(int i=0;i<Size;i++) {
+				
+				String name = in.readUTF();
+				int soluong = in.readInt();
+				Timestamp date = new Timestamp(new SimpleDateFormat("dd/MM/yyyy HH:mm:ss").parse(in.readUTF()).getTime());
+				String trangthai = in.readUTF();
+				HistoryWait h = new HistoryWait( name, soluong, date, trangthai);
+				list.add(h);
+			}
+			return list;
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (ParseException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	return null;
+	}
+	
 
 }

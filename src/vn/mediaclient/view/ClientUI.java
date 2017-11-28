@@ -10,6 +10,7 @@ import java.util.List;
 import java.util.Locale;
 
 import javax.swing.BorderFactory;
+import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
@@ -58,18 +59,22 @@ public class ClientUI extends JFrame implements ActionListener{
 	private int pageMusic;
 	
 	private Client client;
+
+
+
 	
 	public ClientUI(String username,Client client) {
 		this.client = client;
 		this.username = username;
-		
+		KhachHang kh = client.getCus(username);
+		this.id = kh.getId();
 		
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setSize(1000,600);
 		setLayout(new BorderLayout());
 		setLocationRelativeTo(null);
 		setTitle("MediaOne (Client)");
-		
+		setIconImage(new ImageIcon(getClass().getResource("/store.png")).getImage());
 		funcClientPanel = new FuncClientPanel();
 		
 		listDH = new ArrayList<>();
@@ -94,8 +99,9 @@ public class ClientUI extends JFrame implements ActionListener{
 		initNapTien();
 		initRefresh();
 		
-		KhachHang kh = client.getCus(username);
-		this.id = kh.getId();
+		
+		
+		
 		setVisible(true);
 	}
 	
@@ -107,7 +113,7 @@ public class ClientUI extends JFrame implements ActionListener{
 		
 		String name = client.getCusName(username);
 		System.out.println(name);
-		coin = client.getCoinCus(username);
+		coin = client.getCoinCus(id);
 		System.out.println(coin);
 		JLabel label = new JLabel("Xin chào bạn,   "+name+"  !");
 		
@@ -132,7 +138,7 @@ public class ClientUI extends JFrame implements ActionListener{
 		 tablePanel.setPreferredSize(new Dimension(1000, 600));
 		 
 		btnRefresh = new JButton("Refresh");
-		
+		btnRefresh.setIcon(new ImageIcon(getClass().getResource("/refresh.png")));
 		btnRefresh.addActionListener(this);
 		
 		tablePanel.add(btnRefresh,BorderLayout.NORTH);
@@ -160,7 +166,7 @@ public class ClientUI extends JFrame implements ActionListener{
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				KhachHang kh = client.getCus(username);
-				new EditCusView(client, kh);
+				new EditCusView(ClientUI.this,client, kh);
 			}
 		});
 	}
@@ -212,7 +218,7 @@ public class ClientUI extends JFrame implements ActionListener{
 						String strCoin = format.format(coin).toString();
 						
 						JLabel lbCoin = new JLabel("Coin : "+strCoin);
-						lbCoin.setHorizontalAlignment(JLabel.CENTER);
+						lbCoin.setHorizontalAlignment(JLabel.LEFT);
 						topPanel.add(lbCoin,BorderLayout.EAST);
 						
 						topPanel.validate();
