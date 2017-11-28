@@ -40,7 +40,9 @@ public class Client {
 					,UPDATE_NUMBER_PRODUCT=11,UPDATE_CUSTOMER_INFO=12
 					,GET_CUSTOMER=13,CHECK_SERIAL=14,GET_VALUE_CARD=15,CHECK_EXIST_USERNAME=16
 							,ADD_CUSTOMER=17,CLOSE_REQUEST=18,ORDER_REQUEST=19
-	,COUNT_BOOK=20,COUNT_MOVIE=21,COUNT_MUSIC=22,SERVER_CLOSE=23,GET_HISTORY=24;
+	,COUNT_BOOK=20,COUNT_MOVIE=21,COUNT_MUSIC=22,SERVER_CLOSE=23,GET_HISTORY=24
+			,SEARCH_BOOK_BY_NAME_AND_PUBLISHER = 25,SEARCH_BOOK_BY_NAME_AND_AUTHOR = 26,
+			SEARCH_BOOK_BY_PUBLISHER_AND_AUTHOR = 27,SEARCH_BOOK_BY_NAME_AND_PUBLISHER_AND_AUTHOR = 28;
 	public Socket socket;
 	public DataInputStream in;
 	public DataOutputStream out;
@@ -169,7 +171,193 @@ public class Client {
 
 		return null;
 	}
+	
+	public List<Sach> getBookByNameAndPublisher(String name,String publisher) {
+		try {
+			out.writeInt(SEARCH_BOOK_BY_NAME_AND_PUBLISHER);
+			out.flush();
+			
+		out.writeUTF(name);
+		out.flush();
+		
+		out.writeUTF(publisher);
+		out.flush();
+			
+			int size = in.readInt();
+					
+			List<Sach> list = new ArrayList<>();
+			for(int i=0;i<size;i++) {
+				List<String> tacGia = (List<String>) ois.readObject();
+				
+				String id = in.readUTF();
+				String tenSP = in.readUTF();
+				String maLoaiSP = in.readUTF();
+				int soLuongTonKho = in.readInt();
+				long giaMua = in.readLong();
+				long giaBan = in.readLong();
+				Timestamp ngayNhapHangCuoi = new Timestamp(new SimpleDateFormat("dd/MM/yyyy HH:mm:ss").parse(in.readUTF()).getTime());
+				String nhaXB = in.readUTF();
+				
+				
+				Sach s = new Sach(id, tenSP, maLoaiSP, soLuongTonKho, giaMua, giaBan, ngayNhapHangCuoi, nhaXB, tacGia);
+				list.add(s);
+			}
 
+			return list;
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (ClassNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (ParseException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+
+		return null;
+	}
+	
+	public List<Sach> getBookByNameAndAuthor(String name,String author) {
+		try {
+			out.writeInt(SEARCH_BOOK_BY_NAME_AND_AUTHOR);
+			out.flush();
+			
+		out.writeUTF(name);
+		out.flush();
+		
+		out.writeUTF(author);
+		out.flush();
+			
+			int size = in.readInt();
+					
+			List<Sach> list = new ArrayList<>();
+			for(int i=0;i<size;i++) {
+				List<String> tacGia = (List<String>) ois.readObject();
+				
+				String id = in.readUTF();
+				String tenSP = in.readUTF();
+				String maLoaiSP = in.readUTF();
+				int soLuongTonKho = in.readInt();
+				long giaMua = in.readLong();
+				long giaBan = in.readLong();
+				Timestamp ngayNhapHangCuoi = new Timestamp(new SimpleDateFormat("dd/MM/yyyy HH:mm:ss").parse(in.readUTF()).getTime());
+				String nhaXB = in.readUTF();
+				
+				
+				Sach s = new Sach(id, tenSP, maLoaiSP, soLuongTonKho, giaMua, giaBan, ngayNhapHangCuoi, nhaXB, tacGia);
+				list.add(s);
+			}
+
+			return list;
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (ClassNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (ParseException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+
+		return null;
+	}
+
+	public List<Sach> getBookByPublisherAndAuthor(String publisher,String author) {
+		try {
+			out.writeInt(SEARCH_BOOK_BY_PUBLISHER_AND_AUTHOR);
+			out.flush();
+			
+		out.writeUTF(publisher);
+		out.flush();
+		
+		out.writeUTF(author);
+		out.flush();
+			
+			int size = in.readInt();
+					
+			List<Sach> list = new ArrayList<>();
+			for(int i=0;i<size;i++) {
+				List<String> tacGia = (List<String>) ois.readObject();
+				
+				String id = in.readUTF();
+				String tenSP = in.readUTF();
+				String maLoaiSP = in.readUTF();
+				int soLuongTonKho = in.readInt();
+				long giaMua = in.readLong();
+				long giaBan = in.readLong();
+				Timestamp ngayNhapHangCuoi = new Timestamp(new SimpleDateFormat("dd/MM/yyyy HH:mm:ss").parse(in.readUTF()).getTime());
+				String nhaXB = in.readUTF();
+				
+				
+				Sach s = new Sach(id, tenSP, maLoaiSP, soLuongTonKho, giaMua, giaBan, ngayNhapHangCuoi, nhaXB, tacGia);
+				list.add(s);
+			}
+
+			return list;
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (ClassNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (ParseException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+
+		return null;
+	}
+	public List<Sach> getBookByNameAndPublisherAndAuthor(String name,String publisher,String author) {
+		try {
+			out.writeInt(SEARCH_BOOK_BY_NAME_AND_PUBLISHER_AND_AUTHOR);
+			out.flush();
+			
+		out.writeUTF(name);
+		out.flush();
+		
+		out.writeUTF(publisher);
+		out.flush();
+			
+		out.writeUTF(author);
+		out.flush();
+		
+			int size = in.readInt();
+					
+			List<Sach> list = new ArrayList<>();
+			for(int i=0;i<size;i++) {
+				List<String> tacGia = (List<String>) ois.readObject();
+				
+				String id = in.readUTF();
+				String tenSP = in.readUTF();
+				String maLoaiSP = in.readUTF();
+				int soLuongTonKho = in.readInt();
+				long giaMua = in.readLong();
+				long giaBan = in.readLong();
+				Timestamp ngayNhapHangCuoi = new Timestamp(new SimpleDateFormat("dd/MM/yyyy HH:mm:ss").parse(in.readUTF()).getTime());
+				String nhaXB = in.readUTF();
+				
+				
+				Sach s = new Sach(id, tenSP, maLoaiSP, soLuongTonKho, giaMua, giaBan, ngayNhapHangCuoi, nhaXB, tacGia);
+				list.add(s);
+			}
+
+			return list;
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (ClassNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (ParseException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+
+		return null;
+	}
+	
 	public List<DiaPhim> getAllMoviesFromServer(int page) {
 		// TODO Auto-generated method stub
 		try {

@@ -2,6 +2,7 @@ package vn.mediaclient.view;
 
 import java.awt.BorderLayout;
 import java.awt.Dimension;
+import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.text.DecimalFormat;
@@ -50,7 +51,7 @@ public class ClientUI extends JFrame implements ActionListener{
 	private TableMusicPanel tableMusicPanel;
 	
 	private SearchClientPanel searchClientPanel;
-	private JButton btnRefresh;
+	private JButton btnRefresh,btnAdvancedSearch;
 	private String username;
 	private long coin;
 	
@@ -98,7 +99,7 @@ public class ClientUI extends JFrame implements ActionListener{
 		initButtonLogout();
 		initNapTien();
 		initRefresh();
-		
+		initAdvancedSearch();
 		
 		
 		
@@ -138,10 +139,17 @@ public class ClientUI extends JFrame implements ActionListener{
 		 tablePanel.setPreferredSize(new Dimension(1000, 600));
 		 
 		btnRefresh = new JButton("Refresh");
+		btnAdvancedSearch = new JButton("TÌM KIẾM NÂNG CAO");
+		
 		btnRefresh.setIcon(new ImageIcon(getClass().getResource("/refresh.png")));
 		btnRefresh.addActionListener(this);
+		btnAdvancedSearch.addActionListener(this);
 		
-		tablePanel.add(btnRefresh,BorderLayout.NORTH);
+		JPanel pButton = new JPanel(new GridLayout(1, 2,20,0));
+		pButton.add(btnRefresh);
+		pButton.add(btnAdvancedSearch);
+		
+		tablePanel.add(pButton,BorderLayout.NORTH);
 		
 		tabbedProduct = new TabbedProduct();
 		tablePanel.add(tabbedProduct, BorderLayout.CENTER);
@@ -263,6 +271,26 @@ public class ClientUI extends JFrame implements ActionListener{
 		});
 	}
 	
+	public void initAdvancedSearch() {
+	btnAdvancedSearch.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				int now = tabbedProduct.getSelectedIndex();
+				
+				if(now == 0) {
+					new AdvancedSearchBookView(ClientUI.this, client);
+				}
+				else if(now == 1) {
+					
+				}
+				else if(now == 2) {
+			
+				}
+				
+			}
+		});
+	}
 	
 	
 	public void display() {
@@ -420,6 +448,14 @@ public class ClientUI extends JFrame implements ActionListener{
 
 	public List<DiaPhim> getListMovie() {
 		return listMovie;
+	}
+
+	public JButton getBtnAdvancedSearch() {
+		return btnAdvancedSearch;
+	}
+
+	public void setBtnAdvancedSearch(JButton btnAdvancedSearch) {
+		this.btnAdvancedSearch = btnAdvancedSearch;
 	}
 
 	public void setListMovie(List<DiaPhim> listMovie) {
