@@ -35,12 +35,12 @@ private ClientUI clientUI;
 		tableHistoryPanel = new TableHistoryPanel();
 		tableHistoryPanel.updateTable(list);
 		
-		scroll = new JScrollPane();
-		scroll.setViewportView(tableHistoryPanel);
+		
+		
 		
 		setSize(600, 400);
 		setLayout(new BorderLayout(10,10));
-		add(scroll,BorderLayout.CENTER);
+		add(tableHistoryPanel,BorderLayout.CENTER);
 
        add(createButtonPanel(), BorderLayout.SOUTH);
 

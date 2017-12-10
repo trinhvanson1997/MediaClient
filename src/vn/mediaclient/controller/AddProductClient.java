@@ -93,7 +93,8 @@ public class AddProductClient {
 						tfThueVAT.setText("0%");
 						//tfTongTien.setText(String.valueOf(tienTamTinh + tienTamTinh*0.1));
 						
-						tfTongTien.setText(String.valueOf(tienTamTinh));
+						tfTongTien.setText(format.format(tienTamTinh
+								));
 						
 						JOptionPane.showMessageDialog(null, "Thêm thành công");
 						

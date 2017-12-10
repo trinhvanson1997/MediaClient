@@ -6,6 +6,8 @@ import java.awt.Font;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.FocusEvent;
+import java.awt.event.FocusListener;
 import java.sql.Timestamp;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -19,7 +21,6 @@ import javax.swing.JTextField;
 import javax.swing.border.EmptyBorder;
 
 import vn.media.models.KhachHang;
-import vn.media.models.SanPham;
 import vn.mediaclient.client.Client;
 
 public class RegisterBox extends JDialog implements ActionListener {
@@ -48,21 +49,73 @@ public class RegisterBox extends JDialog implements ActionListener {
 		lbNgaySinh = new JLabel("Ngày Sinh");
 		lbDiaChi   = new JLabel("Địa Chỉ");
 		lbSDT      = new JLabel("SĐT");
-		//lbCoin    = new JLabel("Lương");
 		lbUsername = new JLabel("Username");
 		lbPassword = new JLabel("Password");
 		
 		
 		tfHoTen    = new JTextField(15);
-		tfNgaySinh = new JTextField(15);  tfNgaySinh.setToolTipText("vd: 1/9/1997");
+		tfNgaySinh = new JTextField(15);  tfNgaySinh.setText("vd. 1/9/1997");
 		tfDiachi   = new JTextField(15);
 		tfSDT      = new JTextField(15);
-		//tfCoin    = new JTextField(15);
 		tfUsername = new JTextField(15);
 		tfPassword = new JTextField(15);
 		
-	
-		//tfHoTen.setBackground(Color.RED);
+		tfHoTen.addFocusListener(new FocusListener() {
+		    public void focusGained(FocusEvent e) {
+		    	tfHoTen.setBackground(Color.white);
+		    }
+
+		    public void focusLost(FocusEvent e) {
+		        // nothing
+		    }
+		});
+		tfNgaySinh.addFocusListener(new FocusListener() {
+		    public void focusGained(FocusEvent e) {
+		    	tfNgaySinh.setText("");
+		    	tfNgaySinh.setBackground(Color.white);
+		    }
+
+		    public void focusLost(FocusEvent e) {
+		        // nothing
+		    }
+		});
+		tfDiachi.addFocusListener(new FocusListener() {
+		    public void focusGained(FocusEvent e) {
+		    	tfDiachi.setBackground(Color.white);
+		    }
+
+		    public void focusLost(FocusEvent e) {
+		        // nothing
+		    }
+		});
+		tfSDT.addFocusListener(new FocusListener() {
+		    public void focusGained(FocusEvent e) {
+		    	tfSDT.setBackground(Color.white);
+		    }
+
+		    public void focusLost(FocusEvent e) {
+		        // nothing
+		    }
+		});
+		tfUsername.addFocusListener(new FocusListener() {
+		    public void focusGained(FocusEvent e) {
+		    	tfUsername.setBackground(Color.white);
+		    }
+
+		    public void focusLost(FocusEvent e) {
+		        // nothing
+		    }
+		});
+		tfPassword.addFocusListener(new FocusListener() {
+		    public void focusGained(FocusEvent e) {
+		    	tfPassword.setBackground(Color.white);
+		    }
+
+		    public void focusLost(FocusEvent e) {
+		        // nothing
+		    }
+		});
+		
 		btnThem    = new JButton("ĐĂNG KÝ");		btnThem.addActionListener(this);
 		btnHuy     = new JButton("HỦY ");		btnHuy.addActionListener(this);
 		
@@ -82,7 +135,6 @@ public class RegisterBox extends JDialog implements ActionListener {
 		p1.add(lbNgaySinh);		p2.add(tfNgaySinh);	
 		p1.add(lbDiaChi);		p2.add(tfDiachi);
 		p1.add(lbSDT);			p2.add(tfSDT);
-		//p1.add(lbCoin);		p2.add(tfCoin);
 		p1.add(lbUsername);		p2.add(tfUsername);
 		p1.add(lbPassword);		p2.add(tfPassword);
 		
@@ -125,11 +177,11 @@ public class RegisterBox extends JDialog implements ActionListener {
 					Timestamp date = new Timestamp(format.parse(tfNgaySinh.getText()).getTime());
 					
 					KhachHang kh = new KhachHang("", tfHoTen.getText(), date,
-							tfDiachi.getText(), tfSDT.getText(),200000,tfUsername.getText(),tfPassword.getText());
+							tfDiachi.getText(), tfSDT.getText(),2000000,tfUsername.getText(),tfPassword.getText());
 					client.addCus(kh);
 					
 					
-					JOptionPane.showMessageDialog(null, "Đăng ký thành công \nBạn được nhận 200.000đ trong tài khoản !");
+					JOptionPane.showMessageDialog(null, "Đăng ký thành công \nBạn được nhận 2.000.000đ trong tài khoản !");
 					
 					
 					dispose();
@@ -152,38 +204,67 @@ public class RegisterBox extends JDialog implements ActionListener {
 	
 	private boolean checkFormat() {
 		if (tfHoTen.getText().equals(null) || tfHoTen.getText().equals("")) {
+			tfHoTen.setBackground(Color.red);
 			JOptionPane.showMessageDialog(null, "Bạn chưa nhập họ tên", "Cảnh báo",
 					JOptionPane.WARNING_MESSAGE);
 			return false;
 		}
-
+		if(!tfHoTen.equals("")) {
+			String ten = tfHoTen.getText();
+			for(int i=0;i<ten.length();i++) {
+				if(Character.isDigit(ten.charAt(i)))
+				{
+					JOptionPane.showMessageDialog(null, "Họ tên không được chứa ký tự số !", "Cảnh báo",
+							JOptionPane.WARNING_MESSAGE);
+					return false;
+				}
+			}
+		}
 		if (tfNgaySinh.getText().equals(null) || tfNgaySinh.getText().equals("")) {
+			tfNgaySinh.setBackground(Color.red);
 			JOptionPane.showMessageDialog(null, "Bạn chưa nhập ngày sinh", "Cảnh báo",
 					JOptionPane.WARNING_MESSAGE);
 			return false;
 		}
 		if (tfDiachi.getText().equals(null) || tfDiachi.getText().equals("")) {
+			tfDiachi.setBackground(Color.red);
 			JOptionPane.showMessageDialog(null, "Bạn chưa nhập địa chỉ", "Cảnh báo",
 					JOptionPane.WARNING_MESSAGE);
 			return false;
 		}
 
 		if (tfSDT.getText().equals(null) || tfSDT.getText().equals("")) {
+			tfSDT.setBackground(Color.red);
 			JOptionPane.showMessageDialog(null, "Bạn chưa nhập số điện thoại", "Cảnh báo",
 					JOptionPane.WARNING_MESSAGE);
 			return false;
 		}
-
+		if(!tfSDT.getText().equals("")) {
+			String s= tfSDT.getText();
+			for(int i=0;i<s.length();i++) {
+				if(Character.isLetter(s.charAt(i))) {
+					JOptionPane.showMessageDialog(null, "Số điện thoại không được chứa ký tự chữ !", "Cảnh báo",
+							JOptionPane.WARNING_MESSAGE);
+					return false;
+				}
+				
+			}
+					
+		}
+		
 		if (tfUsername.getText().equals(null) || tfUsername.getText().equals("")) {
+			tfUsername.setBackground(Color.red);
 			JOptionPane.showMessageDialog(null, "Bạn chưa nhập username", "Cảnh báo",
 					JOptionPane.WARNING_MESSAGE);
 			return false;
 		}
 		if (tfPassword.getText().equals(null) || tfPassword.getText().equals("")) {
+			tfPassword.setBackground(Color.red);
 			JOptionPane.showMessageDialog(null, "Bạn chưa nhập mật khẩu", "Cảnh báo",
 					JOptionPane.WARNING_MESSAGE);
 			return false;
 		} else if (client.checkExistUsername(tfUsername.getText())) {
+			
 			JOptionPane.showMessageDialog(null, "Username '" + tfUsername.getText() + "' đã tồn tại!", "Warning",
 					WARNING_MESSAGE);
 			return false;

@@ -108,26 +108,35 @@ public class AdvancedSearchBookView extends JDialog implements ActionListener{
 				dispose();
 			}
 			else if(tensach.compareTo("") != 0 && nxb.compareTo("") != 0 && tacgia.equals("")) {
-				List<Sach> list = client.getBookByNameAndPublisher(tensach, nxb);
+				List<Sach> list = client.getBookByNameAndPublisher(tensach.toLowerCase(), nxb.toLowerCase());
 				tableBookPanel.updateTableClient(list);
-				dispose();
+			//	dispose();
 			}
 			else if(tensach.compareTo("") != 0 && nxb.equals("") && tacgia.compareTo("") != 0) {
-				List<Sach> list = client.getBookByNameAndAuthor(tensach, tacgia);
+				List<Sach> list = client.getBookByNameAndAuthor(tensach.toLowerCase(), tacgia.toLowerCase());
 				tableBookPanel.updateTableClient(list);
-				dispose();
+			//	dispose();
 			}
 			else if(tensach.equals("") && nxb.compareTo("") != 0 && tacgia.compareTo("") != 0) {
-				List<Sach> list = client.getBookByPublisherAndAuthor(nxb, tacgia);
+				List<Sach> list = client.getBookByPublisherAndAuthor(nxb.toLowerCase(), tacgia.toLowerCase());
 				tableBookPanel.updateTableClient(list);
-				dispose();
+			//	dispose();
 			}
 			else if(tensach.compareTo("") != 0 && nxb.compareTo("") != 0 && tacgia.compareTo("") != 0) {
-				List<Sach> list = client.getBookByNameAndPublisherAndAuthor(tensach, nxb,tacgia);
+				List<Sach> list = client.getBookByNameAndPublisherAndAuthor(tensach.toLowerCase(), nxb.toLowerCase(),tacgia.toLowerCase());
 				tableBookPanel.updateTableClient(list);
-				dispose();
+			//	dispose();
 			}
-			
+			else if((tensach.compareTo("") != 0 && nxb.equals("") && tacgia.equals(""))  ||
+					(tensach.equals("")  && nxb.compareTo("") != 0 && tacgia.equals(""))  ||
+					(tensach.equals("") && nxb.equals("") && tacgia.compareTo("") !=0)
+					
+					) {
+				System.out.println(tacgia.toLowerCase());
+				List<Sach> list = client.getBookByNameOrPublisherOrAuthor(tensach.toLowerCase(), nxb.toLowerCase(),tacgia.toLowerCase());
+				tableBookPanel.updateTableClient(list);
+				//dispose();
+			}
 			
 		}
 		
