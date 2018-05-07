@@ -54,8 +54,8 @@ public class Client {
 		try {
 				
 			//socket = new Socket("2405:4800:1484:9a0e:edb6:f52f:cb40:c0c9", 2000);
-			//socket = new Socket("localhost", 2000);
-			socket = new Socket("fe80::5507:c43d:5d84:5e4e%4", 2000);
+			socket = new Socket("localhost", 2000);
+			//socket = new Socket("fe80::5507:c43d:5d84:5e4e%4", 2000);
 				in = new DataInputStream(socket.getInputStream());
 				out = new DataOutputStream(socket.getOutputStream());
 				ois = new ObjectInputStream(socket.getInputStream());
